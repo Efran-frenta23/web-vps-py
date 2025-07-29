@@ -3,7 +3,7 @@ version: '3.8'
 services:
   django:
     build:
-      context: ./django-app
+      context: .
       dockerfile: Dockerfile
     container_name: django_vps
     command: >
