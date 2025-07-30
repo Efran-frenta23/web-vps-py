@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   django:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: django_vps
     command: >
       sh -c "python manage.py migrate &&
@@ -33,36 +31,10 @@ services:
     networks:
       - app-network
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - certbot_conf:/etc/letsencrypt
-      - certbot_www:/var/www/certbot
-    depends_on:
-      - django
-    networks:
-      - app-network
-
-  certbot:
-    image: certbot/certbot:v2.6.0
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    volumes:
-      - certbot_conf:/etc/letsencrypt
-      - certbot_www:/var/www/certbot
-    depends_on:
-      - nginx
-    networks:
-      - app-network
+  
 
 volumes:
   postgres_data:
-  certbot_conf:
-  certbot_www:
 
 networks:
   app-network:
